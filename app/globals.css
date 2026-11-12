@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+:root {
+  --space-navy: #071426;
+  --space-indigo: #10243d;
+  --space-panel: #0b1b33;
+  --glow-cyan: #36d6f5;
+  --glow-yellow: #f5c542;
+  --text-soft: #f5f7fb;
+  --background: var(--space-navy);
+  --foreground: var(--text-soft);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-nunito);
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-nunito), "Nunito", "Segoe UI Rounded", "Trebuchet MS",
+    sans-serif;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+/* Chunky, kid-friendly range thumbs */
+input[type="range"] {
+  appearance: none;
+  background: transparent;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  margin-top: -7px;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: #36d6f5;
+  border: 3px solid #071426;
+  box-shadow: 0 0 12px rgba(54, 214, 245, 0.45);
+  cursor: pointer;
+}
+
+input[type="range"]::-moz-range-track {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: #36d6f5;
+  border: 3px solid #071426;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

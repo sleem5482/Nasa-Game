@@ -1,0 +1,113 @@
+{
+  "badge": "Powered by NASA Data",
+  "sourceNote": "Facts inspired by NASA DONKI, OSDR, and Mars weather archives. Simplified for junior astronauts.",
+  "solarFlares": [
+    {
+      "id": "flare-m1",
+      "name": "M-Class Solar Flare",
+      "kidFact": "The Sun sometimes sneezes energy toward Earth and space. An M-class flare is a medium sneeze!",
+      "effect": "Radiation goes up. Hide in the shelter or boost shields.",
+      "donkiHint": "DONKI tracks real solar storms for mission planners."
+    },
+    {
+      "id": "flare-x1",
+      "name": "X-Class Solar Flare",
+      "kidFact": "X-class flares are the biggest solar sneezes. They can scramble radios and raise radiation.",
+      "effect": "Shielding drops fast. Pause outdoor work.",
+      "donkiHint": "NASA watches X-flares closely before EVA walks."
+    },
+    {
+      "id": "cme-1",
+      "name": "Coronal Mass Ejection",
+      "kidFact": "A CME is a giant bubble of Sun plasma racing through space—like a soap bubble of hot gas.",
+      "effect": "Can hit days later. Plan extra power for life support.",
+      "donkiHint": "DONKI lists CME arrival forecasts for crews."
+    }
+  ],
+  "martianDust": [
+    {
+      "id": "dust-local",
+      "name": "Local Dust Devil",
+      "kidFact": "Mars dust can spin into tiny tornadoes called dust devils. They look cool—but they coat solar panels!",
+      "effect": "Energy generation drops until panels are cleaned.",
+      "scienceHint": "Mars rovers measure dust opacity (how cloudy the sky gets)."
+    },
+    {
+      "id": "dust-regional",
+      "name": "Regional Dust Storm",
+      "kidFact": "A dust storm can cover a whole region of Mars and block sunlight for days.",
+      "effect": "Solar power falls. Save energy for oxygen and water.",
+      "scienceHint": "Historic storms helped end some Mars missions that relied only on solar power."
+    },
+    {
+      "id": "dust-global",
+      "name": "Planet-Encircling Dust",
+      "kidFact": "Sometimes dust wraps almost all of Mars. Days get dim like a dusty twilight.",
+      "effect": "Big energy shortage. Teamwork and careful budgets matter most.",
+      "scienceHint": "Global storms can last weeks and change the planet’s temperature."
+    }
+  ],
+  "radiationLimits": [
+    {
+      "id": "rad-daily",
+      "name": "Daily Crew Limit",
+      "kidFact": "Radiation is invisible energy from space. Too much can hurt living things, so crews track it every day.",
+      "safeRange": "Keep shielding meter above 40% during calm space weather.",
+      "osdrHint": "OSDR studies how space radiation affects living systems."
+    },
+    {
+      "id": "rad-flare",
+      "name": "Flare Alert Threshold",
+      "kidFact": "When the Sun flares, radiation jumps. Going into a thick shelter is like putting on a space raincoat.",
+      "safeRange": "During flares, aim for shielding above 70%.",
+      "osdrHint": "NASA research helps design safer habitats and suits."
+    },
+    {
+      "id": "rad-moon",
+      "name": "Lunar Shadow Cold + Rays",
+      "kidFact": "On the Moon, two-week nights are freezing, and there is almost no air to block radiation.",
+      "safeRange": "Balance heat, power, and shields during long shadows.",
+      "osdrHint": "Moon missions practice living with long dark periods."
+    }
+  ],
+  "osdrFacts": [
+    "Plants can grow in space greenhouses—but they need careful light, water, and air mixes.",
+    "Bones and muscles get weaker in microgravity, so astronauts exercise every day.",
+    "Water on a station is recycled from pee, sweat, and even cabin air moisture—science magic!",
+    "Sleep schedules matter: tired crews make riskier choices with power and oxygen.",
+    "Dust on the Moon sticks like chalk and can scratch seals if not cleaned.",
+    "Mars radio messages can take 3 to 22 minutes one way—no instant video calls!",
+    "Oxygen can be made from water with electricity—power and life support are best friends.",
+    "Science points come from experiments that help future explorers stay safer."
+  ],
+  "glossarySeed": [
+    {
+      "term": "Sol",
+      "definition": "A Sol is one day on Mars. It is about 40 minutes longer than an Earth day."
+    },
+    {
+      "term": "Microgravity",
+      "definition": "A feeling of almost floating, like being weightless. On a station, things don't fall the way they do on Earth."
+    },
+    {
+      "term": "Life Support",
+      "definition": "The systems that keep air, water, temperature, and pressure safe so people can live."
+    },
+    {
+      "term": "EVA",
+      "definition": "Extra-Vehicular Activity—fancy words for a spacewalk outside the base."
+    },
+    {
+      "term": "Radiation",
+      "definition": "Invisible energy from the Sun and deep space. Too much is unsafe, so we use shielding."
+    },
+    {
+      "term": "DONKI",
+      "definition": "A NASA space-weather tracker that watches solar flares and storms."
+    },
+    {
+      "term": "OSDR",
+      "definition": "NASA's Open Science Data Repository—real research about living in space."
+    }
+  ]
+}
