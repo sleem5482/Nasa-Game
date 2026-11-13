@@ -3,8 +3,10 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { DIFFICULTY_START, RESOURCE_META, RESOURCE_ORDER } from "@/lib/game/constants";
 import { useGameStore } from "@/lib/game/store";
 import type { Difficulty, Planet } from "@/lib/game/types";
+import { ComicBookButton } from "./ComicBookButton";
 
 function Scene({ src, alt }: { src: string; alt: string }) {
   return (
@@ -104,11 +106,13 @@ const DIFFICULTIES: { id: Difficulty; label: string }[] = [
 export function BriefingScreen() {
   const planet = useGameStore((s) => s.planet);
   const difficulty = useGameStore((s) => s.difficulty);
+  const baseName = useGameStore((s) => s.baseName);
   const selectPlanet = useGameStore((s) => s.selectPlanet);
   const setDifficulty = useGameStore((s) => s.setDifficulty);
-  const startMission = useGameStore((s) => s.startMission);
+  const setBaseName = useGameStore((s) => s.setBaseName);
   const setScreen = useGameStore((s) => s.setScreen);
   const reduced = useGameStore((s) => s.accessibility.reducedMotion);
+  const start = DIFFICULTY_START[difficulty];
 
   return (
     <div
@@ -139,9 +143,12 @@ export function BriefingScreen() {
             className="h-12 w-auto sm:h-14"
           />
 
-          <p className="justify-self-end text-[11px] sm:text-xs font-bold uppercase tracking-[0.14em] text-white/45">
-            Mission Setup · 01
-          </p>
+          <div className="justify-self-end flex items-center gap-2">
+            <ComicBookButton iconOnly />
+            <p className="hidden text-[11px] font-bold uppercase tracking-[0.14em] text-white/45 sm:block sm:text-xs">
+              Mission Setup · 01
+            </p>
+          </div>
         </header>
 
         <div className="mb-6 sm:mb-8 max-w-3xl">
@@ -176,33 +183,67 @@ export function BriefingScreen() {
         </div>
 
         <footer className="mt-auto flex flex-col sm:flex-row sm:items-end justify-between gap-5 pt-2 pb-1">
-          <div>
-            <p className="text-sm font-black text-white mb-1">Simulation Difficulty</p>
-            <p className="text-xs text-white/50 mb-3 max-w-xs">
-              Changes starting supplies, daily use and event pressure.
-            </p>
-            <div
-              className="inline-flex rounded-full border border-white/15 bg-[#121a28] p-1"
-              role="group"
-              aria-label="Simulation difficulty"
-            >
-              {DIFFICULTIES.map((item) => {
-                const active = difficulty === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => setDifficulty(item.id)}
-                    className={`rounded-full px-4 py-2 text-sm font-bold transition ${
-                      active
-                        ? "bg-[#4AF2FF] text-[#071426] shadow-[0_0_16px_rgba(74,242,255,0.35)]"
-                        : "text-white/65 hover:text-white"
-                    }`}
+          <div className="space-y-4">
+            <label className="block max-w-sm text-sm font-black text-white">
+              Base name
+              <input
+                type="text"
+                maxLength={24}
+                value={baseName}
+                onChange={(event) => setBaseName(event.target.value)}
+                placeholder="Nova Base"
+                className="mt-1.5 w-full rounded-xl border-2 border-white/15 bg-[#08143c]/90 px-3 py-2 text-sm font-semibold text-white placeholder:text-white/35 focus:border-[#4AF2FF] focus:outline-none"
+              />
+            </label>
+
+            <div>
+              <p className="text-sm font-black text-white mb-1">Simulation Difficulty</p>
+              <p className="text-xs text-white/50 mb-3 max-w-xs">
+                Changes starting supplies, daily use and event pressure.
+              </p>
+              <div
+                className="inline-flex rounded-full border border-white/15 bg-[#121a28] p-1"
+                role="group"
+                aria-label="Simulation difficulty"
+              >
+                {DIFFICULTIES.map((item) => {
+                  const active = difficulty === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => setDifficulty(item.id)}
+                      className={`rounded-full px-4 py-2 text-sm font-bold transition ${
+                        active
+                          ? "bg-[#4AF2FF] text-[#071426] shadow-[0_0_16px_rgba(74,242,255,0.35)]"
+                          : "text-white/65 hover:text-white"
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div>
+              <p className="mb-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-white/45">
+                Starting meters
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {RESOURCE_ORDER.map((key) => (
+                  <span
+                    key={key}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-black/25 px-2.5 py-1 text-[11px] font-bold text-white/70"
                   >
-                    {item.label}
-                  </button>
-                );
-              })}
+                    <span
+                      className="h-2 w-2 rounded-full"
+                      style={{ backgroundColor: RESOURCE_META[key].color }}
+                    />
+                    {RESOURCE_META[key].label} {start[key]}%
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -210,7 +251,7 @@ export function BriefingScreen() {
             type="button"
             disabled={!planet}
             whileTap={reduced || !planet ? undefined : { scale: 0.98 }}
-            onClick={startMission}
+            onClick={() => setScreen("setup")}
             className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-[18px] px-7 py-3.5 font-black text-base ${
               planet
                 ? "bg-[#4AF2FF] text-[#071426] shadow-[0_0_28px_rgba(74,242,255,0.35)]"

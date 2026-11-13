@@ -1,106 +1,160 @@
 # SOLBOUND: Junior Astronaut Mission Trainer
 
-SOLBOUND is a 30-day resource-management game built with Next.js 16, React 19, TypeScript, Tailwind CSS 4, Framer Motion, and Zustand.
+SOLBOUND is a short mission game for young captains. You run a Moon or Mars outpost for **10 mission days**, keeping three meters alive:
+
+- **Life Support** — air, water and food for the crew
+- **Power** — electricity stored in the batteries
+- **Protection** — walls and shields against space radiation
+
+The game is built with Next.js 16, React 19, TypeScript, Tailwind CSS 4, Framer Motion and Zustand.
 
 ## Run the game
-
-Install dependencies and start the development server:
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser. To create a production build, run `npm run build`.
+Open [http://localhost:3000](http://localhost:3000). To make a production build, run `npm run build`.
 
-## How to play
+## Before Day 1: base setup
+
+The title screen and mission setup come first. After the captain confirms a destination and difficulty, a four-step onboarding flow introduces the base:
+
+1. **Welcome** — NOVA greets the captain and previews the starting meters.
+2. **Meet the Crew** — Amara (Leadership), Chen (Engineering), Ortiz (Plant Science) and Sami (Research).
+3. **Build your base** — drag and drop, or tap, the Habitat, Solar Panels, Oxygen System and Greenhouse onto the green plots. The Habitat must be built first. Each building adds a small starting bonus.
+4. **Colony ready** — review the colony, the mission goal and the boosted starting meters, then select **Begin Day**.
+
+| Building | Starting bonus |
+| --- | --- |
+| Habitat | Life Support +4 |
+| Solar Panels | Power +6 |
+| Oxygen System | Life Support +3 |
+| Greenhouse | Life Support +2, Protection +2 |
+
+The bonuses keep the 10-day economy intact: they reward the setup step without removing the trade-offs in the daily loop.
+
+## Comic book flipbooks
+
+The **Comic Book** button appears on the title screen, the mission setup screen, the first base-setup page, and in the mission top bar. It opens an interactive Heyzine flipbook inside a popup:
+
+- **Moon mission:** lunar edition
+- **Mars mission:** Martian edition
+
+The popup closes with the X button, the Escape key, or a click on the dark background. If the embedded viewer is blocked by the browser, use **Open in new tab** in the popup header.
+
+## The gameplay loop
+
+Every day follows the same six steps:
 
 ```mermaid
 flowchart TD
-    A["Start the game"] --> B["Title screen: enter a name (optional)"]
-    B --> C["Select Start Mission"]
-    C --> D["Choose Moon or Mars and a difficulty"]
-    D --> E["Confirm Mission"]
-    E --> F["Review resources and the outpost"]
-    F --> G["Use up to 3 crew actions (optional)"]
-    G --> H["Allocate exactly 10 power units"]
-    H --> I["Check the resource-change preview"]
-    I --> J{"Does the power total equal 10?"}
-    J -- "No" --> H
-    J -- "Yes" --> K["Select End Day / Allocate Power"]
-    K --> L["Read the mission event and compare choices"]
-    L --> M["Choose and confirm a strategy"]
-    M --> N["Review the Daily Log Comic"]
-    N --> O{"Did Energy, Water, Oxygen, Food, or Shielding reach 0?"}
-    O -- "Yes" --> P["Mission failed: read the debrief"]
-    O -- "No" --> Q{"Have you completed Day 30?"}
-    Q -- "Yes" --> R["Mission complete: read the debrief and stars"]
-    Q -- "No" --> S["Crops grow; crew actions reset"]
-    S --> F
-    P --> T["Replay and try a different strategy"]
-    R --> T
-    T --> B
+    A["1. New mission day<br/>Check the three meters"] --> B["2. Mission event<br/>What is happening today?"]
+    B --> C["3. Captain's decision<br/>Compare 2–3 choices"]
+    C --> D{"Does this plan<br/>need power distribution?"}
+    D -- "Yes" --> E["4. Execute actions<br/>Choose which machines run"]
+    D -- "No" --> F["5. Consequences and feedback"]
+    E --> F
+    F --> G{"Did a meter reach 0?"}
+    G -- "Yes" --> H["Rescue operation<br/>One per mission"]
+    H --> I{"Is the crew still safe?"}
+    I -- "No" --> J["Mission report"]
+    I -- "Yes" --> K{"Day 10 finished?"}
+    G -- "No" --> K
+    K -- "No" --> L["6. Next day"]
+    L --> A
+    K -- "Yes" --> J
 ```
 
-### Setup
+### 1. New mission day
 
-1. On the title screen, enter a name if you want it displayed in NOVA's greeting and as the crew lead. You can leave it blank.
-2. Select **Start Mission**.
-3. Choose the **Moon** or **Mars**, then choose **Easy**, **Normal**, or **Expert** difficulty.
-4. Select **Confirm Mission** to begin Day 1. Easy starts with more supplies; Expert starts with fewer.
+The day screen shows all three meters, the crew's mood, a reminder of yesterday's decision, and any space-weather watch. Select **Start Today's Briefing** when you are ready.
 
-### Your daily routine
+### 2. Mission event
 
-Each day, use the dashboard to check the resource meters and inspect the outpost modules. Click a building to open it. You have **3 crew actions per day**; actions are optional, but can help replenish resources or grow food.
+NOVA explains what is happening. Each event lists **What could happen?** before you decide. Real NASA DONKI space-weather events can replace the hand-written event when the live API is available.
 
-Then manage the **Daily Power Budget**:
+### 3. Captain's decision
 
-1. Adjust the sliders for Habitat, Greenhouse, Power Station, Radiation Shelter, and Research Lab.
-2. Assign exactly **10 power units** in total. **Quick Balance** provides a starting split, but it may not suit your current needs.
-3. Read **Preview consequences** to see how the allocation will change resources. Increase support for the systems whose resources are low.
-4. When the remaining power is **0**, select **End Day / Allocate Power**.
-5. Compare the event choices and their resource effects. Pick one that addresses your biggest risk without exhausting another essential resource, then confirm it.
-6. Read the Daily Log Comic and select **Continue Mission** to advance to the next day.
+Every event offers two or three strategies. Every strategy shows:
 
-The Moon and Mars have different resource pressures, and events can change your meters. Use the preview and current resource levels rather than relying on one fixed allocation or event choice.
+- its **advantage** (green), and
+- its **disadvantage** (amber).
 
-### Crew actions and resource solutions
+There is no perfect choice. Compare the costs with your weakest meter, then confirm.
 
-Each action uses one crew action. The greenhouse actions for planting, watering, and harvesting also use one action each.
+### 4. Execute actions (only when relevant)
 
-| If this resource is low | Try this |
+Some choices ask for a **power plan**. You can switch the Greenhouse, Research Lab and Extra Lights on or off. The **Oxygen System is always on**, because the crew must breathe. The screen previews the next day's meters before you confirm.
+
+Power plans last for one day. Each new morning starts from the safe default so an old plan cannot quietly weaken the base.
+
+### 5. Consequences and feedback
+
+After the day resolves you see:
+
+- the before/after value of all three meters,
+- a breakdown of every change (decision, machines, solar array, daily needs, planet conditions),
+- **NOVA's lesson**, and
+- **What did you learn?**, one idea to remember.
+
+### 6. Next day and rescue
+
+If a meter reaches **0**, the crew gets **one rescue operation per mission**. Each rescue option shows its cost, and an option is disabled if it would empty another meter. If the base cannot be kept alive after the rescue, the mission ends and the report explains why.
+
+Choices leave memory tags, so later events can follow up on what you did (for example, rationing water can bring the recycler back).
+
+## Daily economy
+
+Each day starts with:
+
+| Change | Amount |
 | --- | --- |
-| **Energy** | Assign more power to the Power Station, or clean the solar panels in its module (**+6 energy**). Battery maintenance gives **+5 energy** for **3 water**; the emergency reserve gives **+8 energy** for **2 shielding**. |
-| **Water** | Repair the water recycler in the Habitat (**+6 water** for **4 energy**). Greenhouse research can also trade **3 water** for **4 science**. |
-| **Oxygen** | Monitor air quality in the Habitat (**+3 oxygen** for **1 energy**). Prioritize Habitat and Greenhouse power when adjusting the daily allocation. |
-| **Food** | Plant a greenhouse bed (**2 water**), water growing beds, and harvest a ready crop (**+10 food**). A planted crop starts watered; water it on following days to help it grow. It takes about three mornings to become ready. A growing crop wilts after two days without water. |
-| **Shielding** | Run a shelter drill (**+3 shielding** for **1 energy**), monitor space weather (**+4** for **2 energy**), or add regolith shielding (**+8** for **6 energy**). |
-| **Science** | Analyze samples in the Lab (**+5 science** for **4 energy**) or research hydroponics in the Greenhouse (**+4 science** for **3 water**). Science is not required to survive, but it contributes to a top star rating. |
+| Crew needs | Life Support −10, Protection −5 |
+| Solar array | Power +6 (Mars dust days and Moon nights reduce it) |
+| Oxygen System (locked on) | Power −4, Life Support +6 |
+| Greenhouse | Power −2, Life Support +2 |
+| Research Lab | Power −3, Protection +4 |
+| Extra Lights | Power −1, Life Support +1 |
 
-Other useful details:
+- **Mars:** power is slightly lower each day; dust storms reduce solar output.
+- **Moon:** the long lunar night starts on day 6 and cuts solar power while the base gets colder.
 
-- You can spend up to 3 crew actions each day. Unused actions do not carry over.
-- Watering all thirsty beds is one action; it costs 1 water for each bed watered.
-- Module upgrades cost **8 science** and improve that module's daily contribution, up to level 3.
-- The resource preview includes your power allocation. Event choices and crew actions can change resources separately.
-- Energy, Water, Oxygen, Food, and Shielding must stay above zero. If any reaches zero after a daily decision, the mission ends. Science can be spent down to zero without ending the mission.
+All meters are simplified game values, not real mission measurements.
 
-### Winning and stars
+## Winning and stars
 
-Complete all **30 days** without letting Energy, Water, Oxygen, Food, or Shielding reach zero to secure the outpost. A failed mission can be replayed; your name and accessibility settings are retained.
+Finish all **10 days** with every meter above zero to secure the outpost.
 
-The final star rating depends on your ending resources:
+- **3 stars:** every meter ends at **55 or higher**, and you never needed a rescue.
+- **2 stars:** every meter ends at **30 or higher**.
+- **1 star:** you finish below those thresholds, or the mission ends early.
 
-- **3 stars:** average of the five survival resources is at least 60, and Science is at least 40.
-- **2 stars:** average of the five survival resources is at least 45.
-- **1 star:** you complete the mission below those thresholds. A failed mission receives 1 star.
+Replays keep your name, base name and accessibility settings.
 
-To aim for more stars, protect every survival resource while also earning Science. Before ending each day, check the weakest meter, account for the preview and event costs, and avoid spending heavily on research if life support is at risk.
+## Real data
+
+- **DONKI space weather** (`/api/space-weather`) is fetched live when possible. Real flares and coronal mass ejections can become that day's event and are labelled **Live** in the event card.
+- If the live call fails, the game uses the saved event pool and the hand-written stories. Those facts are labelled **Archived**.
+- The Science Library explains the real science words used in the game.
+
+Set `NASA_API_KEY` in `.env.local` to raise the DONKI request limit. Without it the app uses NASA's `DEMO_KEY`.
 
 ## Accessibility
 
-Use the title-screen controls to enable **Large text** or **Reduced motion**.
+The title screen and settings panel include **Large text** and **Reduced motion**. Sound effects and background music can be toggled separately, and the preference is remembered in the browser.
+
+## Project layout
+
+- `lib/game/constants.ts` — meter names, starting supplies, daily drain, systems
+- `lib/game/types.ts` — all game types
+- `lib/game/engine.ts` — daily resolution, rescue options, stars, event choice
+- `lib/game/events.ts` — 12 hand-written events and their follow-ups
+- `lib/game/spaceWeather.ts` — DONKI normalization and live event override
+- `lib/game/store.ts` — the Zustand state machine for the loop
+- `components/game/*Screen.tsx` — one component per stage of the loop, plus the four-step `SetupScreen` onboarding flow
 
 ## Deployment
 
-Push the project to GitHub and import it into Vercel to deploy.
+Push the project to GitHub and import it into Vercel. No database is required.

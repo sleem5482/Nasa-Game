@@ -24,6 +24,7 @@ import {
 import { formatDelta } from "@/lib/game/dayLogic";
 import { MODULE_ACTIONS } from "@/lib/game/moduleActions";
 import { useGameStore } from "@/lib/game/store";
+import { ModuleScene } from "./ModuleScenes";
 import type { CropPlot, ModuleId, PlotStage, ResourceKey } from "@/lib/game/types";
 
 const MODULE_COPY: Record<
@@ -310,6 +311,7 @@ function InteriorScene({
       />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
       {moduleId === "greenhouse" && <GreenhousePlots onResult={onResult} />}
+      {moduleId !== "greenhouse" && <ModuleScene moduleId={moduleId} onResult={onResult} />}
     </div>
   );
 }
@@ -381,7 +383,7 @@ export function ModuleInterior() {
 
         <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1.85fr)_minmax(280px,0.72fr)]">
           <motion.section
-            className="relative h-[390px] overflow-hidden rounded-[26px] border border-cyan-300/10 bg-[#10243D] p-2.5 shadow-[0_20px_55px_rgba(0,0,0,.4)] sm:h-[500px] sm:p-3"
+            className={`relative ${mod.id === "greenhouse" ? "h-[390px]" : "h-[600px]"} overflow-hidden rounded-[26px] border border-cyan-300/10 bg-[#10243D] p-2.5 shadow-[0_20px_55px_rgba(0,0,0,.4)] sm:h-[500px] sm:p-3`}
             initial={reduced ? false : { opacity: 0, scale: 0.985 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: reduced ? 0 : 0.25 }}

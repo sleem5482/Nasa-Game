@@ -2,6 +2,8 @@ import nasaData from "@/data/nasa_archived_data.json";
 import {
   POWER_BUDGET,
   RESOURCE_META,
+  isMarsDustDay,
+  isMoonNight,
 } from "./constants";
 import type {
   CropPlot,
@@ -103,8 +105,8 @@ export function powerGenerated(
   day: number,
 ): number {
   const base = 4 + allocation.power * 1.5;
-  if (planet === "mars" && day % 7 === 0) return Math.round(base * 0.55);
-  if (planet === "moon" && day % 14 > 7) return Math.round(base * 0.7);
+  if (planet === "mars" && isMarsDustDay(day)) return Math.round(base * 0.55);
+  if (planet === "moon" && isMoonNight(day)) return Math.round(base * 0.7);
   return Math.round(base);
 }
 

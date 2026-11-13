@@ -3,11 +3,18 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useGameStore } from "@/lib/game/store";
 import { BriefingScreen } from "./BriefingScreen";
-import { ComicOverlay } from "./ComicOverlay";
-import { Dashboard } from "./Dashboard";
+import { DayScreen } from "./DayScreen";
 import { DebriefScreen } from "./DebriefScreen";
-import { EventModal } from "./EventModal";
+import { DecisionScreen } from "./DecisionScreen";
+import { EventScreen } from "./EventScreen";
+import { ExecuteScreen } from "./ExecuteScreen";
+import { FlipbookModal } from "./FlipbookModal";
+import { RescueScreen } from "./RescueScreen";
+import { ResultsScreen } from "./ResultsScreen";
 import { ScienceLibrary } from "./ScienceLibrary";
+import { SettingsPanel } from "./SettingsPanel";
+import { SetupScreen } from "./SetupScreen";
+import { SoundManager } from "./SoundManager";
 import { TitleScreen } from "./TitleScreen";
 
 export function GameApp() {
@@ -27,13 +34,20 @@ export function GameApp() {
         >
           {screen === "title" && <TitleScreen />}
           {screen === "briefing" && <BriefingScreen />}
-          {screen === "dashboard" && <Dashboard />}
-          {screen === "event" && <EventModal />}
-          {screen === "comic" && <ComicOverlay />}
+          {screen === "setup" && <SetupScreen />}
+          {screen === "day" && <DayScreen />}
+          {screen === "event" && <EventScreen />}
+          {screen === "decision" && <DecisionScreen />}
+          {screen === "execute" && <ExecuteScreen />}
+          {screen === "results" && <ResultsScreen />}
+          {screen === "rescue" && <RescueScreen />}
           {screen === "debrief" && <DebriefScreen />}
         </motion.div>
       </AnimatePresence>
       <ScienceLibrary />
+      <FlipbookModal />
+      <SoundManager />
+      <SettingsPanel />
     </div>
   );
 }

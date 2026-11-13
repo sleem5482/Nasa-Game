@@ -3,8 +3,10 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import nasaData from "@/data/nasa_archived_data.json";
+import { archived } from "@/lib/game/dataSource";
 import { useGameStore } from "@/lib/game/store";
 import { GlossaryTooltip } from "./GlossaryTooltip";
+import { SourceTag } from "./SourceTag";
 
 export function ScienceLibrary() {
   const open = useGameStore((s) => s.showScienceLibrary);
@@ -34,7 +36,7 @@ export function ScienceLibrary() {
           >
             <div className="flex items-start justify-between gap-3 mb-4">
               <div>
-                <p className="text-yellow-300 text-xs font-bold">{nasaData.badge}</p>
+                <SourceTag source={archived("NASA")} />
                 <h2 className="text-2xl font-black text-white">Science Library</h2>
               </div>
               <button

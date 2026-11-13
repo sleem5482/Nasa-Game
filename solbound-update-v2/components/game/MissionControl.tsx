@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { isMarsDustDay } from "@/lib/game/constants";
 import {
   ArrowLeft,
   Apple,
@@ -266,7 +267,7 @@ export function MissionControl() {
                 <div className="grid grid-cols-2 gap-2">
                   {[
                     ["Temperature", planet === "mars" ? "-63°C" : "-173°C"],
-                    ["Solar", planet === "mars" && day % 7 === 0 ? "Dusty skies" : "Low angle"],
+                    ["Solar", planet === "mars" && isMarsDustDay(day) ? "Dusty skies" : "Low angle"],
                     ["Radiation risk", resources.shielding < 40 ? "High" : "Elevated"],
                     ["Equipment", `${modules.filter((module) => module.status === "online").length} / ${modules.length} nominal`],
                   ].map(([label, value]) => (

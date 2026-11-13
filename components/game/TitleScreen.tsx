@@ -10,18 +10,22 @@ import {
   Check,
   Rocket,
   Settings,
+  Shield,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
+import { MISSION_LENGTH } from "@/lib/game/constants";
+import { startTyping, stopTyping, useAudioSettings } from "@/lib/game/sound";
 import { useGameStore } from "@/lib/game/store";
+import { ComicBookButton } from "./ComicBookButton";
 
-const NOVA_TEXT =
-  "Welcome aboard. Our space colony is facing a critical resource shortage. We have only 30 days to save the mission. Are you ready?";
+const NOVA_TEXT = `Welcome aboard. Our space colony is facing a critical resource shortage. We have only ${MISSION_LENGTH} days to save the mission. Are you ready?`;
 
 // أرقام للديكور بس (شاشة البداية)
-const STATS = [
-  { label: "Oxygen", value: 18, icon: "/images/icon-oxygen.png", color: "text-rose-400" },
-  { label: "Water", value: 32, icon: "/images/icon-water.png", color: "text-orange-300" },
-  { label: "Food", value: 41, icon: "/images/icon-food.png", color: "text-yellow-300" },
-  { label: "Energy", value: 12, icon: "/images/icon-energy.png", color: "text-rose-400" },
+const STATS: { label: string; value: number; icon?: string; color: string }[] = [
+  { label: "Life Support", value: 24, icon: "/images/icon-oxygen.png", color: "text-rose-400" },
+  { label: "Power", value: 18, icon: "/images/icon-energy.png", color: "text-orange-300" },
+  { label: "Protection", value: 61, color: "text-violet-300" },
 ];
 
 function useTypewriter(text: string, instant: boolean) {
@@ -29,22 +33,29 @@ function useTypewriter(text: string, instant: boolean) {
   useEffect(() => {
     if (instant) return;
     let i = 0;
+    startTyping(); // صوت الكيبورد طول ما الكلام بيتكتب
     const id = setInterval(() => {
       i += 1;
       setCount(i);
-      if (i >= text.length) clearInterval(id);
+      if (i >= text.length) {
+        clearInterval(id);
+        stopTyping();
+      }
     }, 28);
-    return () => clearInterval(id);
+    return () => {
+      clearInterval(id);
+      stopTyping();
+    };
   }, [text, instant]);
   return instant ? text : text.slice(0, count);
 }
 
 function Highlighted({ text }: { text: string }) {
-  const parts = text.split(/(critical resource shortage|30 days)/);
+  const parts = text.split(/(critical resource shortage|\d+ days)/);
   return (
     <>
       {parts.map((part, i) =>
-        part === "critical resource shortage" || part === "30 days" ? (
+        part === "critical resource shortage" || /^\d+ days$/.test(part) ? (
           <b key={i} className="text-yellow-300">
             {part}
           </b>
@@ -64,6 +75,12 @@ export function TitleScreen() {
   const toggleLargeText = useGameStore((s) => s.toggleLargeText);
   const toggleReducedMotion = useGameStore((s) => s.toggleReducedMotion);
   const toggleScienceLibrary = useGameStore((s) => s.toggleScienceLibrary);
+  const toggleSettings = useGameStore((s) => s.toggleSettings);
+  const musicOn = useAudioSettings((s) => s.musicOn);
+  const sfxOn = useAudioSettings((s) => s.sfxOn);
+  const setMusicOn = useAudioSettings((s) => s.setMusicOn);
+  const setSfxOn = useAudioSettings((s) => s.setSfxOn);
+  const soundOn = musicOn || sfxOn;
   const accessibility = useGameStore((s) => s.accessibility);
   const reduced = accessibility.reducedMotion;
 
@@ -101,6 +118,7 @@ export function TitleScreen() {
             className="h-14 w-auto sm:h-16"
           />
           <div className="flex items-center gap-2">
+            <ComicBookButton />
             <button
               type="button"
               onClick={() => toggleScienceLibrary(true)}
@@ -112,7 +130,7 @@ export function TitleScreen() {
             <button
               type="button"
               aria-label="Settings"
-              onClick={() => toggleScienceLibrary(true)}
+              onClick={() => toggleSettings(true)}
               className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-[#4aa8ff] bg-[#0d2a5c]/90 hover:bg-[#12397a]"
             >
               <Settings className="h-5 w-5" />
@@ -140,10 +158,14 @@ export function TitleScreen() {
             <h2 className="mb-3 text-center text-xl font-black tracking-wide text-rose-400">
               ⚠ RESOURCE ALERT
             </h2>
-            <div className="grid grid-cols-4 gap-2 text-center">
+            <div className="grid grid-cols-3 gap-2 text-center">
               {STATS.map((s) => (
                 <div key={s.label} className="flex flex-col items-center gap-1">
-                  <Image src={s.icon} alt="" width={40} height={40} className="h-9 w-9 object-contain sm:h-10 sm:w-10" />
+                  {s.icon ? (
+                    <Image src={s.icon} alt="" width={40} height={40} className="h-9 w-9 object-contain sm:h-10 sm:w-10" />
+                  ) : (
+                    <Shield className={`h-9 w-9 sm:h-10 sm:w-10 ${s.color}`} aria-hidden />
+                  )}
                   <strong className={`text-xl font-black sm:text-2xl ${s.color}`}>{s.value}%</strong>
                   <small className="text-xs text-white/80">{s.label}</small>
                 </div>
@@ -192,6 +214,22 @@ export function TitleScreen() {
         </main>
 
         <footer className="flex flex-wrap items-end justify-end gap-3 pb-2">
+          <button
+            type="button"
+            onClick={() => {
+              const next = !soundOn;
+              setMusicOn(next);
+              setSfxOn(next);
+            }}
+            className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold ${
+              soundOn
+                ? "border-cyan-300 bg-cyan-400/20 text-cyan-200"
+                : "border-white/15 bg-[#0B1B33]/80 text-white/80"
+            }`}
+          >
+            {soundOn ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+            {soundOn ? "Sound on" : "Sound off"}
+          </button>
           <button
             type="button"
             onClick={toggleLargeText}
